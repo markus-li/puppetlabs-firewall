@@ -167,7 +167,10 @@ Puppet::Type.type(:firewall).provide :iptables, :parent => Puppet::Provider::Fir
     # --tcp-flags takes two values; we cheat by adding " around it
     # so it behaves like --comment
     values = values.sub(/--tcp-flags (\S*) (\S*)/, '--tcp-flags "\1 \2"')
-
+    
+    # CLUDGE: Remove negators entirely
+    values = values.gsub(%r{!},'')
+    
     # Trick the system for booleans
     @known_booleans.each do |bool|
       # append "true" because all params are expected to have values
